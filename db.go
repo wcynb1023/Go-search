@@ -1,21 +1,23 @@
 package main
+
 import (
 	"context"
 	"fmt"
-	"time"
 	"strconv"
-	"github.com/go-redis/redis/v8" 
+	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
 var (
-	rdb *redis.Client
+	rdb    *redis.Client
 	id_cnt int
 )
 
-func initClient() (err error) {
+func initDB() (err error) {
 	rdb = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
-		Password: "",  
+		Password: "",
 		DB:       0,   // use default DB
 		PoolSize: 100, // 连接池大小
 	})
@@ -28,8 +30,7 @@ func initClient() (err error) {
 	return err
 }
 
-
-func push_in_db(word string , docIDs []string) {
+func push_in_db(word string, docIDs []string) {
 	ctx := context.Background()
 
 	err := rdb.RPush(ctx, word, docIDs).Err()
@@ -40,7 +41,7 @@ func push_in_db(word string , docIDs []string) {
 
 }
 
-func vis_list(url  string){
+func vis_list(url string) {
 	ctx := context.Background()
 	val, err := rdb.Get(ctx, "id_cnt").Result()
 	if err != nil {
@@ -54,42 +55,41 @@ func vis_list(url  string){
 		panic(err)
 	}
 
-	err = rdb.Set(ctx, strconv.Itoa(id_cnt), url , 0).Err()
+	err = rdb.Set(ctx, strconv.Itoa(id_cnt), url, 0).Err()
 	if err != nil {
 		panic(err)
 	}
-	err = rdb.Set(ctx,  url , strconv.Itoa(id_cnt) , 0).Err()
+	err = rdb.Set(ctx, url, strconv.Itoa(id_cnt), 0).Err()
 	if err != nil {
 		panic(err)
 	}
 }
 
-
-func find_key(key string) string{
+func find_key(key string) string {
 	ctx := context.Background()
-	value, err := rdb.Get(ctx,key).Result()
+	value, err := rdb.Get(ctx, key).Result()
 	if err == redis.Nil {
 		fmt.Println("Key does not exist")
 	} else if err != nil {
 		fmt.Println("Error:", err)
 	} else {
-		fmt.Println("\x1b[36m",value,"\x1b[0m")
+		fmt.Println("\x1b[36m", value, "\x1b[0m")
 	}
 	return value
 }
 
-func list_end(word string) (string ,  error) {
+func list_end(word string) (string, error) {
 	ctx := context.Background()
-	result, err := rdb.LIndex(ctx,word, -1).Result()
-	if err != nil{
-		return "" , err
+	result, err := rdb.LIndex(ctx, word, -1).Result()
+	if err != nil {
+		return "", err
 	}
-	return result ,nil
+	return result, nil
 }
 
-func Gets(key string) string{
+func Gets(key string) string {
 	ctx := context.Background()
-	value, err := rdb.Get(ctx,"4").Result()
+	value, err := rdb.Get(ctx, "4").Result()
 	if err == redis.Nil {
 		fmt.Println("Key does not exist")
 	} else if err != nil {
@@ -100,9 +100,9 @@ func Gets(key string) string{
 	return value
 }
 
-func Get_list(key string) []string{
+func Get_index_list(key string) []string {
 	ctx := context.Background()
-	list, err := rdb.LRange(ctx,key, 0, -1).Result()
+	list, err := rdb.LRange(ctx, key, 0, -1).Result()
 	if err != nil {
 		fmt.Println("读取列表失败:", err)
 		panic(err)
