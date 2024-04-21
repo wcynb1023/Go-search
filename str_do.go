@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-func clean_str(str string ) string{
-	// 使用正则表达式匹配非字母数字字符
+func clean_str(str string) string {
+	// 过滤单词连上的字符
 	reg := regexp.MustCompile(`[^a-zA-Z0-9 ]`)
 	str = reg.ReplaceAllString(str, "")
 

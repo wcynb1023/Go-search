@@ -1,8 +1,12 @@
 package main
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 func Atoi_list(str string) []int {
+	str = strings.ToLower(str)
 	arr := Get_index_list(str)
 	intSlice1 := make([]int, len(arr))
 	for j, val := range arr {

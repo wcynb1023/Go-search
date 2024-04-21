@@ -2,13 +2,14 @@ package main
 
 import (
 	//"fmt"
-	"github.com/gocolly/colly"
 	"log"
 	"strings"
+
+	"github.com/gocolly/colly"
 	//"strconv"
 )
 
-func init_crawl() *colly.Collector{
+func init_crawl() *colly.Collector {
 
 	c := colly.NewCollector(
 		colly.MaxDepth(4),
@@ -33,7 +34,7 @@ func init_crawl() *colly.Collector{
 		// 在这里可以对链接进行进一步处理或过滤
 
 		//fmt.Println("Visiting:", link)
-		
+
 		err := e.Request.Visit(link)
 		if err != nil {
 			log.Println(err)
@@ -42,7 +43,7 @@ func init_crawl() *colly.Collector{
 	})
 
 	c.OnHTML("p", func(e *colly.HTMLElement) {
-		ids := find_key(e.Request.URL.String()) 
+		ids := find_key(e.Request.URL.String())
 
 		text := strings.TrimSpace(e.Text)
 		if text != "" {
@@ -50,15 +51,14 @@ func init_crawl() *colly.Collector{
 			text = clean_str(text)
 			var documents = []string{text}
 
-			index := BuildInvertedIndex(documents , ids)
+			index := BuildInvertedIndex(documents, ids)
 			//fmt.Println("Inverted Index:")
 			for word, docIDs := range index {
-				push_in_db(word,docIDs)
+				push_in_db(word, docIDs)
 				//fmt.Printf("%s: %v\n", word, docIDs)
 			}
 		}
 	})
-
 
 	return c
 }
