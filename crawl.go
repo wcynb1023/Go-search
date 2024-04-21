@@ -2,6 +2,7 @@ package main
 
 import (
 	//"fmt"
+	"fmt"
 	"log"
 	"strings"
 
@@ -21,7 +22,7 @@ func init_crawl() *colly.Collector {
 	})
 
 	c.OnResponse(func(r *colly.Response) {
-		//fmt.Println("Visited", r.Request.URL.String())
+		fmt.Println("Visited", r.Request.URL.String())
 		vis_list(r.Request.URL.String())
 		//fmt.Println("Response:", string(r.Body))
 	})
@@ -42,7 +43,7 @@ func init_crawl() *colly.Collector {
 		//fmt.Println("Visited:", link)
 	})
 
-	c.OnHTML("p", func(e *colly.HTMLElement) {
+	c.OnHTML("div", func(e *colly.HTMLElement) {
 		ids := find_key(e.Request.URL.String())
 
 		text := strings.TrimSpace(e.Text)

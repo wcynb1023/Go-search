@@ -36,6 +36,7 @@ func push_in_db(word string, docIDs []string) {
 	err := rdb.RPush(ctx, word, docIDs).Err()
 	if err != nil {
 		fmt.Println("insert Redis fail:", err)
+		fmt.Println("word: ", word, "  docIDs: ", docIDs)
 		return
 	}
 

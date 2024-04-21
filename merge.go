@@ -3,6 +3,7 @@ package main
 import (
 	"strconv"
 	"strings"
+	"sync"
 )
 
 func Atoi_list(str string) []int {
@@ -43,4 +44,28 @@ func merge_list(str []string) []int {
 	}
 
 	return ans
+}
+
+func merge_list_dc(str []string, l int, r int) []int {
+
+	if l == r {
+		return Atoi_list(str[l])
+	}
+	mid := (l + r) / 2
+	var l_list, r_list []int
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		l_list = merge_list_dc(str, l, mid)
+	}()
+	go func() {
+		defer wg.Done()
+		r_list = merge_list_dc(str, mid+1, r)
+	}()
+
+	wg.Wait()
+	return merge(l_list, r_list)
+
 }

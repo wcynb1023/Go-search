@@ -16,11 +16,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("finish")  */
+	fmt.Println("finish") */
 
 	str := read()
-	ans := merge_list(str)
 
+	//ans := merge_list(str)
+	ans := merge_list_dc(str, 0, len(str)-1)
 	return_web(ans)
 
 }
