@@ -66,6 +66,16 @@ func vis_list(url string) {
 	}
 }
 
+func title_push_in_db(url string, title string) {
+	ctx := context.Background()
+	idx := find_key(url)
+	err := rdb.Set(ctx, "title"+idx, title, 0).Err()
+	if err != nil {
+		panic(err)
+	}
+
+}
+
 func find_key(key string) string {
 	ctx := context.Background()
 	value, err := rdb.Get(ctx, key).Result()
@@ -74,7 +84,8 @@ func find_key(key string) string {
 	} else if err != nil {
 		fmt.Println("Error:", err)
 	} else {
-		fmt.Println("\x1b[36m", value, "\x1b[0m")
+		fmt.Printf("")
+		//fmt.Println("\x1b[36m", value, "\x1b[0m")
 	}
 	return value
 }

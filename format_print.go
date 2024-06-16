@@ -31,8 +31,9 @@ func return_web(ans []int) {
 	for num, i := range ans {
 		//fmt.Printf("%d ",i)
 		ids := strconv.Itoa(i)
-		fmt.Printf("👍👍👍👍\x1b[34m%3d\x1b[0m : ", num)
+		fmt.Printf("\x1b[34m%3d\x1b[0m : ", num)
 		a := find_key(ids)
+		fmt.Printf("\033[32m%s\033[0m\n", find_key("title"+ids))
 		url_list = append(url_list, a)
 	}
 

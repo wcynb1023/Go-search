@@ -14,7 +14,7 @@ func init_crawl() *colly.Collector {
 
 	c := colly.NewCollector(
 		colly.MaxDepth(4),
-		colly.AllowedDomains("wiki.osdev.org"),
+		colly.AllowedDomains("wiki.osdev.org", "www.nesdev.org"),
 	)
 
 	c.OnRequest(func(r *colly.Request) {
@@ -23,6 +23,7 @@ func init_crawl() *colly.Collector {
 
 	c.OnResponse(func(r *colly.Response) {
 		fmt.Println("Visited", r.Request.URL.String())
+
 		vis_list(r.Request.URL.String())
 		//fmt.Println("Response:", string(r.Body))
 	})
@@ -59,6 +60,11 @@ func init_crawl() *colly.Collector {
 				//fmt.Printf("%s: %v\n", word, docIDs)
 			}
 		}
+	})
+	c.OnHTML("title", func(e *colly.HTMLElement) {
+		title := e.Text
+		title_push_in_db(e.Request.URL.String(), title)
+		//fmt.Println(title)
 	})
 
 	return c

@@ -5,4 +5,6 @@
 - [ ] 多线程倒排索引
 - [ ] 模糊搜索
 
-测试爬取网站 https://wiki.osdev.org/Main_Page
+测试爬取网站 
+https://wiki.osdev.org/
+https://www.nesdev.org/wiki/

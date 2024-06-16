@@ -5,18 +5,23 @@ import (
 )
 
 func main() {
-
 	if err := initDB(); err != nil {
 		fmt.Println("init error")
 		return
 	}
 
-	/* c := init_crawl()
+	c := init_crawl()
 	err := c.Visit("https://wiki.osdev.org")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("finish") */
+	fmt.Println("finish")
+
+	err2 := c.Visit("https://www.nesdev.org/wiki/")
+	if err2 != nil {
+		panic(err2)
+	}
+	fmt.Println("finish")
 
 	str := read()
 
