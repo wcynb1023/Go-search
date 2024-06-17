@@ -20,8 +20,7 @@ func merge(arr []int, brr []int) []int {
 	len_arr := len(arr)
 	len_brr := len(brr)
 	var ans []int
-	var i = 0
-	var j = 0
+	i, j := 0, 0
 	for i < len_arr && j < len_brr {
 		if arr[i] == brr[j] {
 			ans = append(ans, arr[i])
@@ -33,6 +32,11 @@ func merge(arr []int, brr []int) []int {
 			j += 1
 		}
 	}
+
+	if len(ans) == 0 {
+		ans = append(arr, brr...)
+	}
+
 	return ans
 }
 

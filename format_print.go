@@ -1,54 +1,55 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"os/exec"
 	"strconv"
-	"strings"
 )
 
 var srr string
 
-func read() []string {
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("\n╔══════════════════════════════════════════════╗")
-	fmt.Println("║   search key:                                ║")
-	fmt.Println("╚══════════════════════════════════════════════╝")
-	fmt.Print("\033[2C \033[2A \033[11C ")
-	input, _ := reader.ReadString('\n')
+/*
+	func read() []string {
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Println("\n╔══════════════════════════════════════════════╗")
+		fmt.Println("║   search key:                                ║")
+		fmt.Println("╚══════════════════════════════════════════════╝")
+		fmt.Print("\033[2C \033[2A \033[11C ")
+		input, _ := reader.ReadString('\n')
 
-	str := strings.Fields(input)
+		str := strings.Fields(input)
 
-	fmt.Print("\033[2B")
-	return str
-}
-
-func return_web(ans []int) {
-	var url_list []string
-
+		fmt.Print("\033[2B")
+		return str
+	}
+*/
+func return_web(ans []int) []Document {
+	url_list := make([]Document, len(ans))
 	for num, i := range ans {
-		//fmt.Printf("%d ",i)
 		ids := strconv.Itoa(i)
-		fmt.Printf("\x1b[34m%3d\x1b[0m : ", num)
-		a := find_key(ids)
-		fmt.Printf("\033[32m%s\033[0m\n", find_key("title"+ids))
-		url_list = append(url_list, a)
+		fmt.Printf("\x1b[34m%3d\x1b[0m : \033[32m%s\033[0m\n", num, find_key("title"+ids))
+		url_list[num].URL = find_key(ids)
+		url_list[num].Title = find_key("title" + ids)
+		url_list[num].ID = ids
 	}
+	/*
+		fmt.Println("\n╔══════════════════════════════════════════════╗")
+		fmt.Println("║   go to web:                                ║")
+		fmt.Println("╚══════════════════════════════════════════════╝")
+		fmt.Print("\033[2C \033[2A \033[11C ")
+		var inp int
+		fmt.Scan(&inp)
+		cmd := exec.Command("firefox", url_list[inp].URL)
 
-	var inp int = 0
-	fmt.Println("\n╔══════════════════════════════════════════════╗")
-	fmt.Println("║   go to web:                                ║")
-	fmt.Println("╚══════════════════════════════════════════════╝")
-	fmt.Print("\033[2C \033[2A \033[11C ")
-	fmt.Scanln(&inp)
-	cmd := exec.Command("firefox", url_list[inp])
-
-	// 执行命令并捕获输出和错误
-	_, err := cmd.Output()
-	if err != nil {
-		fmt.Println("命令执行出错:", err)
-		return
-	}
+		// Start the command and ignore stdout and stderr
+		if err := cmd.Start(); err != nil {
+			fmt.Println("命令执行出错:", err)
+			return nil
+		}
+		// Wait for the command to finish
+		if err := cmd.Wait(); err != nil {
+			fmt.Println("命令执行出错:", err)
+			return nil
+		}
+	*/
+	return url_list
 }

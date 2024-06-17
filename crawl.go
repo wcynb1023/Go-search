@@ -14,7 +14,7 @@ func init_crawl() *colly.Collector {
 
 	c := colly.NewCollector(
 		colly.MaxDepth(4),
-		colly.AllowedDomains("wiki.osdev.org", "www.nesdev.org"),
+		colly.AllowedDomains("wiki.osdev.org", "www.nesdev.org/wiki"),
 	)
 
 	c.OnRequest(func(r *colly.Request) {

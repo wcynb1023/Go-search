@@ -1,0 +1,155 @@
+<!DOCTYPE html> <html> <head> <title>搜索</title> <style> html, body { height: 100%; margin: 0; padding: 0; font-family: Arial, sans-serif; overflow-x: hidden; /* Prevent horizontal scrollbar */ }
+body {
+        overflow-y: auto; /* Allow vertical scrolling */
+        scroll-behavior: smooth; /* Enable smooth scrolling */
+    }
+
+    #particles-js {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: #2b2e4a;
+        z-index: -1;
+    }
+
+    #app {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #062933;
+        font-size: 2.5em;
+        margin-bottom: 20px;
+    }
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .search-container input[type="text"] {
+        width: calc(100% - 130px);
+        padding: 10px;
+        margin-right: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    .search-container button {
+        padding: 10px;
+        background-color: #062933;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+    .search-container button:hover {
+        background-color: #062933;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        background: #f9f9f9;
+        margin: 10px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    h3 {
+        margin: 0 0 10px;
+        font-size: 1.2em;
+    }
+
+    p {
+        margin: 0;
+        color: #555;
+    }
+
+    a {
+        color: #321212;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    #references {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    #references a {
+        margin-right: 10px;
+    }
+</style>
+
+</head> <body> <!--<div id="particles-js"></div>--> <div id="app"> <h2></h2>
+
+    <div class="search-container">
+        <input type="text" id="query" placeholder="search something about NES or OS" onkeyup="checkEnter(event)">
+        <button id="searchBtn" onclick="search()">Search</button>
+    </div>
+
+    <ul id="results">
+        <!-- Search results will be inserted here -->
+    </ul>
+</div>
+
+<div id="references">
+    <h3>内容来源:</h3>
+    <a href="https://www.example.com/reference1" target="_blank">OSwiki</a>
+    <a href="https://www.example.com/reference2" target="_blank">NESwiki</a>
+
+</div>
+
+<script>
+    function checkEnter(event) {
+        if (event.key === 'Enter') {
+            document.getElementById('searchBtn').click();
+        }
+    }
+
+    function search() {
+        const query = document.getElementById('query').value;
+        fetch('/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ query })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const resultsElement = document.getElementById('results');
+            resultsElement.innerHTML = data.map(result => `
+                <div>
+                    <a href="${result.URL}" target="_blank">
+                        <h3>${result.Title}</h3>
+                    </a>
+                </div>
+            `).join('');
+
+            resultsElement.scrollIntoView({ behavior: 'smooth' });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script></body> </html>
